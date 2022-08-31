@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width">
+        <title>Spotify Web Now Playing Modual</title>
+        <link href="style.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="spotify">
+            <img id="art" width="100px" height="100px">
+            <div id="data">
+                <div id="text">
+                    <h1 id="track">Track</h1>
+                    <h2 id="album">Album</h2>
+                    <h2 id="artist">Artist</h2>
+                </div>
+                <div id="progressdiv">
+                    <progress id="length" max="0" value="0"></progress>
+                    <div id="labels">
+                        <label id="progress" for="length"></label>
+                        <label id="max" for="length"></label>
+                    </div>
+                </div>
+                <audio controls scr="" id="preview"></audio>
+            </div>
+        </div>
+        <script src="Spotify.js"></script>
+    </body>
+</html>
