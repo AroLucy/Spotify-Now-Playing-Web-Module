@@ -1,88 +1,65 @@
-function dataset() {
-	(async () => {
-		// Fetch Access Token from Auth.js and convert to JSON Object
+async function GetData() {
+	// Fetch Access Token from Auth.js and convert to JSON Object
 		
-		await fetch("/Auth.json").then(response => response.json())
-			.then(data => {
-				console.log(data);
-				var auth = data.auth;
+	response = await fetch("/Auth.json")
+	data = await response.json()
+	auth = data.auth;
 
-				// Fetch Currently Playing Data from Spotify and convert to JSON Object
-				
-				fetch("https://api.spotify.com/v1/me/player/currently-playing?market=GB", {
-					headers: {
-						Accept: "application/json",
-						Authorization: "Bearer " + auth,
-						"Content-Type": "application/json"
-					}
-				}).then((response) => {
-					console.log(response.json().then(
-						(data) => {
+	response = await fetch("https://api.spotify.com/v1/me/player/currently-playing?market=GB", {
+	    headers: {
+	        Accept: "application/json",
+		    Authorization: "Bearer " + auth,
+	    	"Content-Type": "application/json"
+	    }
+    });
+	nowPlay = await response.json()
+};
+async function SetData() {
+	LastTrack = document.getElementById("track").innerText
+    Track = nowPlay.item.name;
+	Progress = nowPlay.progress_ms;
 
-							// Declare data as now Play
-							
-							var LastTrack = document.getElementById("track").innerText
-							let nowPlay = data;
+	// Check if the previous track fetched is the same as current track fetched
+	if (LastTrack !== Track) {
 
-							var Track = nowPlay.item.name;
-							var Progress = nowPlay.progress_ms;
-
-							// Check if the previous track fetched is the same as current track fetched
-							
-							if (LastTrack !== Track) {
-
-								// Extract needed Data from nowPlay
+		// Extract needed Data from nowPlay
 								
-								var Album = nowPlay.item.album.name;
-								var Artist = nowPlay.item.artists[0].name;
-								var AlbumArt = nowPlay.item.album.images[0].url;
-								var Duration = nowPlay.item.duration_ms;
-								var Preview = nowPlay.item.preview_url;
+		Album = nowPlay.item.album.name;
+		Artist = nowPlay.item.artists[0].name;
+		AlbumArt = nowPlay.item.album.images[0].url;
+		Duration = nowPlay.item.duration_ms;
+		Preview = nowPlay.item.preview_url;
 
-								// Apply new data to HTML elements 
-								
-								document.getElementById("track").innerText = Track;
-								document.getElementById("album").innerText = Album;
-								document.getElementById("artist").innerText = Artist;
-								document.getElementById("art").src = AlbumArt;
-								document.getElementById("length").max = Duration;
-								document.getElementById("preview").src = Preview;
-							};
-
-							// Update progress bar with new time 
+		// Apply new data to HTML elements 
+		
+		document.getElementById("track").innerText = Track;
+		document.getElementById("album").innerText = Album;
+		document.getElementById("artist").innerText = Artist;
+		document.getElementById("art").src = AlbumArt;
+		document.getElementById("length").max = Duration;
+		document.getElementById("preview").src = Preview;
+	};
+	// Update progress bar with new time 
 							
-							document.getElementById("length").value = Progress;
-						}
-					));
-				});
-			})
-	})();
+    document.getElementById("length").value = Progress;
 }
+GetData()
 
 function msToTime(duration) {
-	var //milliseconds = Math.floor((duration % 1000) / 100),
-		seconds = Math.floor((duration / 1000) % 60),
-		minutes = Math.floor((duration / (1000 * 60)) % 60),
-		//hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
-
-	//hours = (hours < 10) ? "0" + hours : hours;
-	minutes = minutes//(minutes < 10) ? "0" + minutes : minutes;
+	seconds = Math.floor((duration / 1000) % 60),
+	minutes = Math.floor((duration / (1000 * 60)) % 60)
+	minutes = minutes
 	seconds = (seconds < 10) ? "0" + seconds : seconds;
-
-	return minutes + ":" + seconds// + "." + milliseconds;
+	return minutes + ":" + seconds
 }
 
-var bar = document.getElementById("progress")
-
-dataset()
-
-function update() {
-	var timemax = msToTime(document.getElementById("length").max)
-	var time = msToTime(document.getElementById("length").value)
+async function update() {
+	GetData()
+	SetData()
+	timemax = msToTime(Duration);
+	time = msToTime(Progress);
 	document.getElementById("progress").innerHTML = time
 	document.getElementById("max").innerHTML = timemax
-	dataset()
 }
-
 
 setInterval(update, 1000);
