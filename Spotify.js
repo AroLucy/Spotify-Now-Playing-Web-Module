@@ -28,7 +28,7 @@ async function SetData() {
 		Artist = nowPlay.item.artists[0].name;
 		AlbumArt = nowPlay.item.album.images[0].url;
 		Duration = nowPlay.item.duration_ms;
-		Preview = nowPlay.item.preview_url;
+		Preview = "https://open.spotify.com/embed/track/" + nowPlay.item.id;
 
 		// Apply new data to HTML elements 
 		
