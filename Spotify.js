@@ -26,18 +26,26 @@ async function SetData() {
 								
 		Album = nowPlay.item.album.name;
 		Artist = nowPlay.item.artists[0].name;
-		AlbumArt = nowPlay.item.album.images[0].url;
 		Duration = nowPlay.item.duration_ms;
-		Preview = "https://open.spotify.com/embed/track/" + nowPlay.item.id;
+		//
+		//
 
 		// Apply new data to HTML elements 
 		
 		document.getElementById("track").innerText = Track;
 		document.getElementById("album").innerText = Album;
 		document.getElementById("artist").innerText = Artist;
-		document.getElementById("art").src = AlbumArt;
 		document.getElementById("length").max = Duration;
-		document.getElementById("preview").src = Preview;
+
+		if (nowPlay.item.album.images[0] !== undefined) {
+			document.getElementById("art").style.display = "block"
+			AlbumArt = nowPlay.item.album.images[0].url;
+			Preview = "https://open.spotify.com/embed/track/" + nowPlay.item.id;
+			document.getElementById("preview").src = Preview;
+			document.getElementById("art").src = AlbumArt;
+		} else {
+			document.getElementById("art").style.display = "none"
+		}
 	};
 	// Update progress bar with new time 
 							
